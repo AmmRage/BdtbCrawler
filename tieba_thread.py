@@ -17,12 +17,16 @@ class Tbthread:
         except:
             self.id = 0
 
-
     def add_reply(self, reply):
         self.replies.append(reply)
 
     def tojson(self):
-        return ""
+        ret = {}
+        ret["url"] = self.url
+        ret["id"] = str(self.id)
+        ret["replies"] = [r.tojson() for r in self.replies]
+        return ret
+
 
 class Tbreply:
     content = ""
@@ -33,9 +37,17 @@ class Tbreply:
         self.content = content
         self.reply_author = author
 
-
     def add_lzl(self, lzl_reply):
         self.lzl.append(lzl_reply)
+
+    def tojson(self):
+        ret = {}
+        ret["author"] = self.reply_author
+        ret["content"] = self.content
+        # ret["lzl"] = [l.tojson() for l in self.lzl]
+        ret["lzl"] = self.lzl
+
+        return ret
 
 
 if __name__ == "__main__":

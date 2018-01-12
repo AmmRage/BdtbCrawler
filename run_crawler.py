@@ -33,6 +33,8 @@ def run_crawler():
 
         pnList.remove(index)
         listLen = len(pnList)
+    cr.close()
+
 
 
 if __name__ == '__main__':

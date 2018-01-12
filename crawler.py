@@ -2,9 +2,10 @@
 
 from requestium import Session, Keys
 import re
-
+import time
+from store import store_thread, thread_existed
 from tieba_thread import Tbthread, Tbreply
-
+import random
 tbDase = r'http://tieba.baidu.com/'
 class TbCrawler():
 
@@ -15,22 +16,32 @@ class TbCrawler():
         # self.s.driver.set_window_position(-
         pass
 
-    def getPage(self, url):
+    def close(self):
+        self.s.driver.close()
+        self.s.close()
+
+    def navigate(self, url):
+        time.sleep(random.randint(0,1))
         self.s.driver.get(url)
+
+    def getPage(self, url):
+        self.navigate(url)
         # elements = self.s.driver.xpath("//div[@class='i']")
         elements = self.s.driver.find_elements_by_class_name('i')
         t_List = list(map(lambda e: e.find_element_by_tag_name('a').get_attribute("href"), elements))
 
         for t in t_List: #threads
             # print(t)
-            self.getThread(t)
-            pass
+            try:
+                self.getThread(t)
+            except:
+                pass
 
     def getThread(self, t_url):
-        self.s.driver.get(t_url)
-
+        if thread_existed(t_url):
+            return
+        self.navigate(t_url)
         tb_thread = Tbthread(self.s.driver.current_url)
-
         replies = self.s.driver.find_elements_by_class_name('i')
         for r in replies:
             author = r.find_element_by_tag_name('span').find_element_by_tag_name('a').text
@@ -46,11 +57,11 @@ class TbCrawler():
                         tb_reply.add_lzl(lzl_r)
             except:
                 pass
-
             tb_thread.add_reply(tb_reply)
+        store_thread(tb_thread)
 
     def getLouzhonglou(self, lzlUrl):
-        self.s.driver.get(lzlUrl)
+        self.navigate(lzlUrl)
         replies = self.s.driver.find_elements_by_class_name('i')
         return list(map(lambda e: e.text, replies))
 

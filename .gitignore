@@ -6,6 +6,12 @@
 .idea/**/tasks.xml
 .idea/dictionaries
 
+venv/
+__pycache__/
+
+stored/*.json
+
+
 # Sensitive or high-churn files:
 .idea/**/dataSources/
 .idea/**/dataSources.ids
@@ -35,6 +41,7 @@ cmake-build-release/
 out/
 
 
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
@@ -51,4 +58,3 @@ crashlytics-build.properties
 fabric.properties
 
 
-venv/
