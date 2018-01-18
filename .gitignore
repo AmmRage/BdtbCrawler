@@ -10,6 +10,7 @@ venv/
 __pycache__/
 
 stored/*.json
+config/
 
 
 # Sensitive or high-churn files:

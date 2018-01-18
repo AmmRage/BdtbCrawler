@@ -1,15 +1,19 @@
-# encoding=utf-8
+# coding=utf-8
 
 from requestium import Session, Keys
 import re
 import time
-from store import store_thread, thread_existed
-from tieba_thread import Tbthread, Tbreply
+
+
 import random
+
+from crawler.store import store_thread, thread_existed
+from crawler.tieba_thread import Tbreply, Tbthread
+
 tbDase = r'http://tieba.baidu.com/'
 class TbCrawler():
 
-    s = Session(webdriver_path='./chromedriver/chromedriver.exe', browser='chrome', default_timeout=15)
+    s = Session(webdriver_path='./../chromedriver/chromedriver.exe', browser='chrome', default_timeout=15)
     threadJson = {}
 
     def __init__(self):
