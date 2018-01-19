@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import oss2
-import os
-import shutil
 
 from crawler.configuration import CrConfig
 
@@ -27,7 +25,7 @@ class oss_store():
     def upload_str(self, str):
         # 上传一段字符串。Object名是motto.txt，内容是一段名言。
         # self.bucket.put_object('motto.txt', 'Never give up. - Jack Ma')
-                # 下载到本地文件
+        # 下载到本地文件
         # self.bucket.get_object_to_file('motto.txt', '本地文件名.txt')
         pass
 
@@ -40,7 +38,7 @@ class oss_store():
         pass
 
 
-    def upload_file(self):
+    def upload_file(self, oss_name, local_db_file):
         # 把本地文件 “座右铭.txt” 上传到OSS，新的Object叫做 “我的座右铭.txt”
         # 注意到，这次put_object()的第二个参数是file object；而上次上传是一个字符串。
         # put_object()能够识别不同的参数类型
@@ -50,8 +48,8 @@ class oss_store():
         # or
 
         # 上面两行代码，也可以用下面的一行代码来实现
-        # bucket.put_object_from_file('云上座右铭.txt', '本地座右铭.txt')
-        pass
+        result = self.bucket.put_object_from_file(oss_name, local_db_file)
+        return result.status == 200
 
     def enum_bucket_objects(self):
         # 列举Bucket下10个Object，并打印它们的最后修改时间、文件名
@@ -87,7 +85,6 @@ class oss_store():
         else:
             assert False
 
-
     def get_bucket_stat(self):
         # 获取bucket相关信息
         bucket_info = self.bucket.get_bucket_info()
@@ -100,3 +97,8 @@ class oss_store():
         print('storage: ' + str(bucket_stat.storage_size_in_bytes))
         print('object count: ' + str(bucket_stat.object_count))
         print('multi part upload count: ' + str(bucket_stat.multi_part_upload_count))
+
+if __name__ == '__main__':
+    oss = oss_store()
+    print(oss.upload_file("crawler_stat_db.json", r'.\stored\crawler_stat_db.json'))
+    pass
