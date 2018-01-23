@@ -5,12 +5,14 @@ from flask import Flask
 from multiprocessing import Process
 from os import walk
 from hurry.filesize import size, si
-from run_crawler import run_crawler
 import ctypes
 import os
 import platform
 import sys
 from flask import render_template
+
+from crawler import run_crawler
+from crawler.store import get_oss_size
 
 app = Flask(__name__)
 
@@ -28,7 +30,9 @@ def hello():
     if disc_spare < 1000000000:
         raise BaseException("no spare space")
     spare = size(disc_spare, system=si)
-    return render_template('index.html', size=downloaded, spare=spare)
+
+    oss_size = size(get_oss_size(), system=si)
+    return render_template('index.html', size=downloaded, spare=spare, osssize=oss_size)
 
 
 def get_free_space_mb(dirname):
@@ -46,7 +50,8 @@ def run_main():
         p.start()
         # p.join()
         app.run(host='0.0.0.0', port=10086)
-    except:
+    except BaseException as ex:
+        print(str(ex))
         try:
             p.terminate()
         except:

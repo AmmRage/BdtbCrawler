@@ -98,6 +98,11 @@ class oss_store():
         print('object count: ' + str(bucket_stat.object_count))
         print('multi part upload count: ' + str(bucket_stat.multi_part_upload_count))
 
+
+    def get_bucket_size(self):
+        bucket_stat = self.bucket.get_bucket_stat()
+        return bucket_stat.storage_size_in_bytes
+
 if __name__ == '__main__':
     oss = oss_store()
     print(oss.upload_file("crawler_stat_db.json", r'.\stored\crawler_stat_db.json'))

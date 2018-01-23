@@ -1,13 +1,9 @@
 # coding = utf-8
 import re
-
 import os
-
 from os import path
 from zipfile import ZipFile, ZIP_DEFLATED
-
 from tinydb import TinyDB, Query
-
 from crawler.oss_basic import oss_store
 
 stat_db_name = r'.\stored\crawler_stat_db.json'
@@ -16,9 +12,7 @@ oss = oss_store()
 def store_page_url(pageUrl):
     db = TinyDB(stat_db_name)
     table = db.table('table_loaded_pages')
-
     query = Query()
-
     if not table.search(query.url == pageUrl):
         table.insert({'url': pageUrl})
     else:
@@ -100,6 +94,8 @@ def get_database_id():
     db.close()
     return id
 
+def get_oss_size():
+    return oss.get_bucket_size()
 
 if __name__ == '__main__':
     # db = TinyDB(r'.\stored\db.json')
