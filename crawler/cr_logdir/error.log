@@ -1,0 +1,10 @@
+DEBUG:simple_example:debug message
+INFO:simple_example:info message
+WARNING:simple_example:warn message
+ERROR:simple_example:error message
+CRITICAL:simple_example:critical message
+DEBUG:cr_log:debug message
+INFO:cr_log:info message
+WARNING:cr_log:warn message
+ERROR:cr_log:error message
+CRITICAL:cr_log:critical message

@@ -1,8 +1,8 @@
 # coding=utf-8
 import random
 
-from crawler.store import store_page_url
-from crawler.tb_crawler import TbCrawler
+from store import store_page_url
+from tb_crawler import TbCrawler
 
 baseUrlBeiguo = r'http://tieba.baidu.com/mo/m?kw=%E8%83%8C%E9%94%85'
 baseUrlKangya = r'http://tieba.baidu.com/mo/m?kw=%E6%8A%97%E5%8E%8B'
@@ -27,7 +27,6 @@ def run_crawler():
         try:
             cr.getPage(pageUrl)
             store_page_url(pageUrl)
-            pass
         except BaseException as ex:
             print(ex)
 
@@ -38,6 +37,7 @@ def run_crawler():
 
 
 if __name__ == '__main__':
+    print("start crawling")
     run_crawler()
 
 

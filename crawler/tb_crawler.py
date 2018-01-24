@@ -3,12 +3,9 @@
 from requestium import Session, Keys
 import re
 import time
-
-
 import random
-
-from crawler.store import store_thread, thread_existed
-from crawler.tieba_thread import Tbreply, Tbthread
+from store import thread_existed, store_thread
+from tieba_thread import Tbreply, Tbthread
 
 tbDase = r'http://tieba.baidu.com/'
 class TbCrawler():

@@ -2,7 +2,7 @@
 
 import oss2
 
-from crawler.configuration import CrConfig
+from configuration import CrConfig
 
 
 class oss_store():

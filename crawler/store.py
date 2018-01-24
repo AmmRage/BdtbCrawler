@@ -4,7 +4,8 @@ import os
 from os import path
 from zipfile import ZipFile, ZIP_DEFLATED
 from tinydb import TinyDB, Query
-from crawler.oss_basic import oss_store
+
+from oss_basic import oss_store
 
 stat_db_name = r'.\stored\crawler_stat_db.json'
 oss = oss_store()
@@ -20,17 +21,20 @@ def store_page_url(pageUrl):
     db.close()
 
 def store_thread(thread):
-    dbId = str(get_database_id())
+    dbId = get_database_id()
     dbfile = str.format(r'.\stored\database_{0}.json', dbId)
 
     if os.path.isfile(dbfile):
         if path.getsize(dbfile) > 100000000: # > 100 M
             dbzipfile = str.format(r'.\stored\database_{0}.zip', dbId)
             with ZipFile(dbzipfile, 'w', compression=ZIP_DEFLATED) as dbzip:
-                dbzip.write(dbfile)
-            oss.upload_file(str.format('database_{0}.zip', dbId), dbzipfile)
+                dbzip.write(dbfile, arcname=str.format(r'database_{0}.json', dbId))
+            if oss.upload_file(str.format('database_{0}.zip', dbId), dbzipfile):
+                os.remove(dbzipfile)
+                os.remove(dbfile)
 
             dbfile = str.format(r'.\stored\database_{0}.json', dbId+1)
+            dbId += 1
 
     if not db_id_exist(dbId):
         store_database_id(dbId)
@@ -92,7 +96,7 @@ def get_database_id():
         return 0
     id = max(all_ids)
     db.close()
-    return id
+    return id['db_id']
 
 def get_oss_size():
     return oss.get_bucket_size()
@@ -105,5 +109,10 @@ if __name__ == '__main__':
 
     # store_page(r'www.baidu.com')
 
+    # print(get_database_id())
+    # store_database_id(1)
+
+    # with ZipFile(r'.\stored\x.zip', 'w', compression=ZIP_DEFLATED) as dbzip:
+    #     dbzip.write(r'.\stored\crawler_stat_db.json', arcname='x.json')
     pass
 

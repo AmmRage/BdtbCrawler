@@ -1,9 +1,7 @@
 # coding=utf-8
 
-import os
 from flask import Flask
 from multiprocessing import Process
-from os import walk
 from hurry.filesize import size, si
 import ctypes
 import os
@@ -11,8 +9,8 @@ import platform
 import sys
 from flask import render_template
 
-from crawler import run_crawler
-from crawler.store import get_oss_size
+from run_crawler import run_crawler
+from store import get_oss_size
 
 app = Flask(__name__)
 
@@ -46,14 +44,15 @@ def get_free_space_mb(dirname):
 
 def run_main():
     try:
-        p = Process(target=run_crawler)
-        p.start()
+        # p = Process(target=run_crawler)
+        # p.start()
         # p.join()
         app.run(host='0.0.0.0', port=10086)
     except BaseException as ex:
         print(str(ex))
         try:
-            p.terminate()
+            # p.terminate()
+            pass
         except:
             pass
         pass
@@ -65,6 +64,7 @@ def test_network():
 if __name__ == "__main__":
     arglen = len(sys.argv)
     if arglen == 1:
+        print('run main')
         run_main()
     elif arglen == 2:
         print('test network')

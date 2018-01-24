@@ -1,3 +1,5 @@
+flask
+hurry.filesize
 certifi==2017.11.5
 chardet==3.0.4
 cssselect==1.0.3
