@@ -1,16 +1,15 @@
 # coding=utf-8
 
 from flask import Flask
-from multiprocessing import Process
 from hurry.filesize import size, si
 import ctypes
 import os
 import platform
 import sys
 from flask import render_template
+import datetime
 
-from run_crawler import run_crawler
-from store import get_oss_size
+from db.store import get_oss_size
 
 app = Flask(__name__)
 
@@ -30,7 +29,9 @@ def hello():
     spare = size(disc_spare, system=si)
 
     oss_size = size(get_oss_size(), system=si)
-    return render_template('index.html', size=downloaded, spare=spare, osssize=oss_size)
+
+    updated_time = '{0:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now())
+    return render_template('index.html', size=downloaded, spare=spare, osssize=oss_size, time=updated_time)
 
 
 def get_free_space_mb(dirname):

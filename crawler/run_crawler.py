@@ -1,7 +1,7 @@
 # coding=utf-8
 import random
 
-from store import store_page_url
+from util.cr_logging import cr_logger
 from tb_crawler import TbCrawler
 
 baseUrlBeiguo = r'http://tieba.baidu.com/mo/m?kw=%E8%83%8C%E9%94%85'
@@ -21,14 +21,15 @@ def run_crawler():
 
     while (listLen > 0):
         index = pnList[random.randrange(0, len(pnList))]
+        cr_logger.info("will process index: " + str(index))
         print("index: " + str(index))
 
         pageUrl = str.format(baseUrlKangyaTemp, str(index))
         try:
             cr.getPage(pageUrl)
-            store_page_url(pageUrl)
+            cr_logger.info('finish on page: ' + pageUrl)
         except BaseException as ex:
-            print(ex)
+            cr_logger.warning('getPage error detail: ' + str(ex))
 
         pnList.remove(index)
         listLen = len(pnList)

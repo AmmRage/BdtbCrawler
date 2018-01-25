@@ -2,7 +2,7 @@
 
 import oss2
 
-from configuration import CrConfig
+from util.configuration import CrConfig
 
 
 class oss_store():

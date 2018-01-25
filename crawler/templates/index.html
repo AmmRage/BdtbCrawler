@@ -5,10 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        #main{
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+    </style>
 </head>
 <body>
-    <p>downloaded: {{ size }}</p>
-    <p>spare space: {{ spare }}</p>
-    <p>storage: {{ osssize }}</p>
+    <div id="main">
+        <p>downloaded: {{ size }}</p>
+        <p>spare space: {{ spare }}</p>
+        <p>storage: {{ osssize }}</p>  
+        <p>updated on : {{ time }}</p>  
+    </div>
 </body>
 </html>
