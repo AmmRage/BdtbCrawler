@@ -4,9 +4,9 @@ import re
 
 
 class Tbthread:
-    url = ""
-    id = 0
-    replies = list()
+    # url = ""
+    # id = 0
+    # replies = list()
 
     def __init__(self, url):
         self.url = url
@@ -15,6 +15,7 @@ class Tbthread:
             self.id = int(m.groups(0)[0])
         except:
             self.id = 0
+        self.replies = list()
 
     def add_reply(self, reply):
         self.replies.append(reply)

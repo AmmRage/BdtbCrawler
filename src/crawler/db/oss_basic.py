@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import oss2
+from src.crawler.util.configuration import CrConfig
 
-from util.configuration import CrConfig
 
-
-class oss_store():
-
+class Oss_store:
     conf = CrConfig()
     auth = None
     bucket = None
@@ -104,6 +102,6 @@ class oss_store():
         return bucket_stat.storage_size_in_bytes
 
 if __name__ == '__main__':
-    oss = oss_store()
-    print(oss.upload_file("crawler_stat_db.json", r'.\stored\crawler_stat_db.json'))
+    # oss = oss_store()
+    # print(oss.upload_file('', ''))
     pass

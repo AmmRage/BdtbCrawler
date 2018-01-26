@@ -9,9 +9,11 @@
 venv/
 __pycache__/
 cr_logdir/
-stored/*.json
+__stored/*.json
 config/
-
+__stored/
+__log_dir/
+__config/
 
 # Sensitive or high-churn files:
 .idea/**/dataSources/

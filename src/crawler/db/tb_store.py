@@ -4,21 +4,26 @@ import os
 from os import path
 from zipfile import ZipFile, ZIP_DEFLATED
 from tinydb import TinyDB, Query
+from src.general_work_env import work_env
 
-from util.cr_logging import cr_logger
-from db.oss_basic import oss_store
+from src.crawler.db.oss_basic import Oss_store
+from src.crawler.util.cr_logging import cr_logger
 
-stat_db_name = r'.\stored\crawler_stat_db.json'
-oss = oss_store()
 
+
+oss = Oss_store()
+__table_loaded_pages_name__ = 'table_loaded_pages'
+__table_thread_name__ = 'table_threads'
+__table_database_id_name__ = 'table_database_id'
 
 def store_page_url(pageUrl):
-    db = TinyDB(stat_db_name)
-    table = db.table('table_loaded_pages')
+    db = TinyDB(work_env.stat_db_fullname)
+    table = db.table(__table_loaded_pages_name__)
     query = Query()
     if not table.search(query.url == pageUrl):
         table.insert({'url': pageUrl})
     else:
+        cr_logger.warning(str.format('already loaded page. url: {0}', pageUrl))
         print('exists')
     db.close()
 
@@ -26,11 +31,11 @@ def store_page_url(pageUrl):
 # store a thread object to database
 def store_thread(thread):
     dbId = get_database_id()
-    dbfile = str.format(r'.\stored\database_{0}.json', dbId)
+    dbfile = work_env.get_db_file_fullname(str.format('database_{0}.json', str(dbId)))
 
     if os.path.isfile(dbfile):
-        if path.getsize(dbfile) > 100000000:  # > 100 M
-            dbzipfile = str.format(r'.\stored\database_{0}.zip', dbId)
+        if path.getsize(dbfile) > 10000000:  # > 100 M
+            dbzipfile = work_env.get_db_file_fullname(str.format('database_{0}.zip', dbId))
             with ZipFile(dbzipfile, 'w', compression=ZIP_DEFLATED) as dbzip:
                 dbzip.write(dbfile, arcname=str.format(r'database_{0}.json', dbId))
             if oss.upload_file(str.format('database_{0}.zip', dbId), dbzipfile):
@@ -38,28 +43,28 @@ def store_thread(thread):
                 os.remove(dbfile)
                 cr_logger.info(str.format('finished uploading {0}', dbfile))
 
-            dbfile = str.format(r'.\stored\database_{0}.json', dbId + 1)
+            dbfile = work_env.get_db_file_fullname(str.format('database_{0}.json', dbId + 1))
             dbId += 1
 
     if not db_id_exist(dbId):
         store_database_id(dbId)
 
     db = TinyDB(dbfile)
-    table = db.table('table_threads')
+    table = db.table(__table_thread_name__)
     query = Query()
     if not table.search(query.id == str(thread.id)):
         table.insert({'id': str(thread.id), 't_url': thread.url, 'thread': thread.tojson()})
     db.close()
-    cr_logger.info('finish store thread object with id: ' + thread.id + ' to ' + dbfile)
+    cr_logger.info('finish store thread object with id: ' + str(thread.id) + ' to ' + dbfile)
 
 
 def thread_existed(t_url):
     m = re.search("m\?kz=(\d+)", t_url)
     id = int(m.groups(0)[0])
-    if not os.path.isfile(stat_db_name):
+    if not os.path.isfile(work_env.stat_db_fullname):
         return False
-    db = TinyDB(stat_db_name)
-    table = db.table('table_thread_id')
+    db = TinyDB(work_env.stat_db_fullname)
+    table = db.table(__table_database_id_name__)
     query = Query()
     if table.search(query.t_id == id):
         db.close()
@@ -71,8 +76,8 @@ def thread_existed(t_url):
 
 
 def store_thread_id(id):
-    db = TinyDB(stat_db_name)
-    table = db.table('table_thread_id')
+    db = TinyDB(work_env.stat_db_fullname)
+    table = db.table(__table_database_id_name__)
     query = Query()
     if not table.search(query.t_id == id):
         table.insert({'t_id': id})
@@ -80,8 +85,8 @@ def store_thread_id(id):
 
 
 def db_id_exist(dbid):
-    db = TinyDB(stat_db_name)
-    table = db.table('table_database_id')
+    db = TinyDB(work_env.stat_db_fullname)
+    table = db.table(__table_database_id_name__)
     query = Query()
     if table.search(query.db_id == dbid):
         db.close()
@@ -93,8 +98,8 @@ def db_id_exist(dbid):
 
 
 def store_database_id(dbid):
-    db = TinyDB(stat_db_name)
-    table = db.table('table_database_id')
+    db = TinyDB(work_env.stat_db_fullname)
+    table = db.table(__table_database_id_name__)
     query = Query()
     if not table.search(query.db_id == dbid):
         table.insert({'db_id': dbid})
@@ -102,8 +107,8 @@ def store_database_id(dbid):
 
 
 def get_database_id():
-    db = TinyDB(stat_db_name)
-    table = db.table('table_database_id')
+    db = TinyDB(work_env.stat_db_fullname)
+    table = db.table(__table_database_id_name__)
     all_ids = table.all()
     if len(all_ids) == 0:
         return 0
@@ -117,7 +122,7 @@ def get_oss_size():
 
 
 if __name__ == '__main__':
-    # db = TinyDB(r'.\stored\db.json')
+    # db = TinyDB(db_dir + 'db.json')
     # table = db.table('name')
     # table.insert({'value': True})
     # print(table.all())
@@ -129,4 +134,9 @@ if __name__ == '__main__':
 
     # with ZipFile(r'.\stored\x.zip', 'w', compression=ZIP_DEFLATED) as dbzip:
     #     dbzip.write(r'.\stored\crawler_stat_db.json', arcname='x.json')
+
+
+    if not db_id_exist(0):
+        store_database_id(0)
+    print(db_id_exist(0))
     pass

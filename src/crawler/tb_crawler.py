@@ -5,18 +5,19 @@ import re
 import time
 import random
 
-from util.cr_logging import cr_logger
-from db.store import thread_existed, store_thread, store_page_url
-from model.model_tieba_thread import Tbreply, Tbthread
+from src.crawler.db.tb_store import store_page_url, thread_existed, store_thread
+from src.crawler.model.model_tieba_thread import Tbthread, Tbreply
+from src.crawler.util.cr_logging import cr_logger
+from src.general_work_env import work_env
 
 tbDase = r'http://tieba.baidu.com/'
 
-
 class TbCrawler():
-    s = Session(webdriver_path='./../chromedriver/chromedriver.exe',
+    s = Session(webdriver_path=work_env.chromedirver,
                 browser='chrome',
                 default_timeout=15
-                , webdriver_options={'arguments': ['headless', 'disable-gpu']}
+                # , webdriver_options={'arguments': ['headless']}
+                # , webdriver_options={'arguments': ['headless', 'disable-gpu']}
                 )
     threadJson = {}
 
@@ -69,7 +70,7 @@ class TbCrawler():
                 # check if has lou zhong lou
                 huifu = r.find_element_by_class_name('reply_to').text
 
-                if re.match("回复\(\d+\)", huifu) != None:
+                if reply_index != 0 or re.match("回复\(\d+\)", huifu) != None:
                     lzlUrl = r.find_elements_by_tag_name('a')[-1].get_attribute("href")
                     lzl_replies = self.getLouzhonglou(lzlUrl)
                     for lzl_r in lzl_replies:
@@ -77,7 +78,7 @@ class TbCrawler():
             except BaseException as lex:
                 # if 0, it's the 1st reply, that no 'reply_to' there
                 # to avoid the misleading error info in the log. we'd better not record it
-                if len(tb_thread.replies) != 0 and reply_index == 0:
+                if len(tb_thread.replies) != 0:
                     cr_logger.debug('error in getting lou zhong lou under: ' + t_url)
                     cr_logger.debug('error detail: ' + str(lex))
             tb_thread.add_reply(tb_reply)
