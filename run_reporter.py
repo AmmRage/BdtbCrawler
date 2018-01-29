@@ -8,11 +8,15 @@ import platform
 import sys
 from flask import render_template
 import datetime
+from src.general_work_env import work_env
+
 
 if len(sys.argv) != 2:
     print('wrong arguements')
     sys.path.insert(0, sys.argv[1])
-from src.general_work_env import work_env
+
+
+
 work_env.setup_env(sys.argv[1])
 
 from src.crawler.db.tb_store import get_oss_size
@@ -55,7 +59,7 @@ def run_main():
         # p = Process(target=run_crawler)
         # p.start()
         # p.join()
-        app.run(host='0.0.0.0', port=5938)
+        app.run(host='0.0.0.0', port=80)
     except BaseException as ex:
         print(str(ex))
         try:
