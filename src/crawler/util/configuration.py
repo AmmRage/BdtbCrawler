@@ -1,7 +1,8 @@
 # coding=utf-8
 import configparser
 
-from src.general_work_env import work_env
+from src import general_work_env as env
+
 
 class CrConfig:
 
@@ -14,7 +15,7 @@ class CrConfig:
 
     def __init__(self):
         config = configparser.ConfigParser()
-        config.read(work_env.get_config_file(), encoding='utf-8')
+        config.read(env.work_env.get_config_file(), encoding='utf-8')
 
         self.oss_key = config['alioss']['key']
         self.oss_secret = config['alioss']['secret']

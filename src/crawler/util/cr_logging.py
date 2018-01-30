@@ -3,8 +3,7 @@
 import logging
 import os
 
-from src.general_work_env import work_env
-
+from src import general_work_env as env
 
 class Cr_Logger:
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
@@ -23,28 +22,28 @@ class Cr_Logger:
 
     def __init__(self):
 
-        fh = logging.FileHandler(work_env.get_log_file_fullname('cr_debug.log'))
+        fh = logging.FileHandler(env.work_env.get_log_file_fullname('cr_debug.log'))
         fh.setLevel(logging.DEBUG)
         fh.setFormatter(self.formatter)
         self.logger_debug.addHandler(fh)
 
-        fh = logging.FileHandler(work_env.get_log_file_fullname('cr_info.log'))
+        fh = logging.FileHandler(env.work_env.get_log_file_fullname('cr_info.log'))
         fh.setLevel(logging.INFO)
         fh.setFormatter(self.formatter)
         self.logger_info.addHandler(fh)
 
-        fh = logging.FileHandler(work_env.get_log_file_fullname('cr_warning.log'))
+        fh = logging.FileHandler(env.work_env.get_log_file_fullname('cr_warning.log'))
         fh.setLevel(logging.WARNING)
         fh.setFormatter(self.formatter)
         self.logger_warning.addHandler(fh)
 
-        fh = logging.FileHandler(work_env.get_log_file_fullname('cr_error.log'))
+        fh = logging.FileHandler(env.work_env.get_log_file_fullname('cr_error.log'))
         fh.setLevel(logging.ERROR)
         fh.setFormatter(self.formatter)
         self.logger_error.addHandler(fh)
 
     def check_dir(self):
-        if not os.path.isdir(work_env.log_dir):
+        if not os.path.isdir(env.work_env.log_dir):
             os.mkdir(self.logdir)
 
     def debug(self, log):

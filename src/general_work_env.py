@@ -5,7 +5,6 @@ import sys
 
 
 class Cr_work_env:
-
     db_dir = ''
     log_dir = ''
     config_file = ''
@@ -13,6 +12,9 @@ class Cr_work_env:
 
     __stat_db_name__ = 'crawler_stat_db.json'
     stat_db_fullname = ''
+
+    def __init__(self, base_dir):
+        self.setup_env(base_dir)
 
     def setup_env(self, base_dir):
         if not path.isdir(base_dir):
@@ -22,7 +24,6 @@ class Cr_work_env:
         if not path.isdir(self.db_dir):
             os.mkdir(self.db_dir)
         self.stat_db_fullname = path.join(self.db_dir, self.__stat_db_name__)
-
 
         self.log_dir = path.join(base_dir, '__log_dir')
         if not path.isdir(self.log_dir):
@@ -49,4 +50,7 @@ class Cr_work_env:
         raise BaseException('not found config file: ' + self.config_file)
 
 
-work_env = Cr_work_env()
+if sys.argv.__len__() != 2:
+    raise Exception('wrong count of arguments')
+
+work_env = Cr_work_env(sys.argv[1])

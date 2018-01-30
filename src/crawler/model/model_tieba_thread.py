@@ -31,11 +31,12 @@ class Tbthread:
 class Tbreply:
     content = ""
     reply_author = ""
-    lzl = list()
+    lzl = None
 
     def __init__(self, content, author):
         self.content = content
         self.reply_author = author
+        self.lzl = list()
 
     def add_lzl(self, lzl_reply):
         self.lzl.append(lzl_reply)

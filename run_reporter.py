@@ -59,7 +59,7 @@ def run_main():
         # p = Process(target=run_crawler)
         # p.start()
         # p.join()
-        app.run(host='0.0.0.0', port=80)
+        app.run(host='0.0.0.0', port=10098)
     except BaseException as ex:
         print(str(ex))
         try:

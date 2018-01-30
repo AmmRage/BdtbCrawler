@@ -1,15 +1,8 @@
 # coding=utf-8
 import random
-import sys
-from src.general_work_env import work_env
-
-if len(sys.argv) != 2:
-    print('wrong arguements')
-work_env.setup_env(sys.argv[1])
 
 import src.crawler.tb_crawler
 from src.crawler.util.cr_logging import cr_logger
-
 
 baseUrlBeiguo = r'http://tieba.baidu.com/mo/m?kw=%E8%83%8C%E9%94%85'
 baseUrlKangya = r'http://tieba.baidu.com/mo/m?kw=%E6%8A%97%E5%8E%8B'
@@ -18,8 +11,8 @@ baseUrlKangyaTemp = 'http://tieba.baidu.com/mo/m?pnum={0}&kw=%E6%8A%97%E5%8E%8B&
 
 currentMaxPage = 74363
 
-def run_crawler():
 
+def run_crawler():
     pnList = list(range(0, 25000))
     listLen = len(pnList)
 
@@ -34,6 +27,7 @@ def run_crawler():
         try:
             cr.getPage(pageUrl)
             cr_logger.info('finish on page: ' + pageUrl)
+            break
         except BaseException as ex:
             cr_logger.warning('getPage error detail: ' + str(ex))
 
@@ -41,8 +35,7 @@ def run_crawler():
         listLen = len(pnList)
     cr.close()
 
+
 if __name__ == '__main__':
     print("start crawling")
     run_crawler()
-
-
