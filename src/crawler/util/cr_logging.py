@@ -2,7 +2,7 @@
 
 import logging
 import os
-from logging.handlers import TimedRotatingFileHandler
+
 from src import general_work_env as env
 
 class Cr_Logger:
@@ -21,23 +21,23 @@ class Cr_Logger:
     logger_error.setLevel(logging.ERROR)
 
     def __init__(self):
-
-        fh = TimedRotatingFileHandler(env.work_env.get_log_file_fullname('cr_debug.log'))
+        pid = str(os.getpid())
+        fh = logging.FileHandler(env.work_env.get_log_file_fullname(pid + '_cr_debug.log'))
         fh.setLevel(logging.DEBUG)
         fh.setFormatter(self.formatter)
         self.logger_debug.addHandler(fh)
 
-        fh = TimedRotatingFileHandler(env.work_env.get_log_file_fullname('cr_info.log'))
+        fh = logging.FileHandler(env.work_env.get_log_file_fullname(pid + '_cr_info.log'))
         fh.setLevel(logging.INFO)
         fh.setFormatter(self.formatter)
         self.logger_info.addHandler(fh)
 
-        fh = TimedRotatingFileHandler(env.work_env.get_log_file_fullname('cr_warning.log'))
+        fh = logging.FileHandler(env.work_env.get_log_file_fullname(pid + '_cr_warning.log'))
         fh.setLevel(logging.WARNING)
         fh.setFormatter(self.formatter)
         self.logger_warning.addHandler(fh)
 
-        fh = TimedRotatingFileHandler(env.work_env.get_log_file_fullname('cr_error.log'))
+        fh = logging.FileHandler(env.work_env.get_log_file_fullname(pid + '_cr_error.log'))
         fh.setLevel(logging.ERROR)
         fh.setFormatter(self.formatter)
         self.logger_error.addHandler(fh)
