@@ -2,10 +2,11 @@
 
 import oss2
 from src.crawler.util.configuration import CrConfig
+from src.crawler.util.configuration import cr_proj_conf
 
 
 class Oss_store:
-    conf = CrConfig()
+    conf = cr_proj_conf
     auth = None
     bucket = None
 

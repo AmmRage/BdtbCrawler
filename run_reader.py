@@ -9,8 +9,6 @@ __table_thread_name__ = 'table_threads'
 __table_database_id_name__ = 'table_database_id'
 
 
-def func():
-    return True
 
 def read():
     dbfile = env.work_env.get_db_file_fullname(str.format('database_{0}.json', '0'))
@@ -22,8 +20,10 @@ def read():
     dblen = len(table.all())
     print(dblen)
 
-    th = table.all()[0]
-    print(th)
+    # th = table.all()
+    for th in table.all():
+        print(len(th['thread']['replies']))
+        print(th)
 
     db.close()
 

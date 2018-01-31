@@ -26,8 +26,9 @@ def run_crawler():
         pageUrl = str.format(baseUrlKangyaTemp, str(index))
         try:
             cr.getPage(pageUrl)
+
             cr_logger.info('finish on page: ' + pageUrl)
-            break
+            # break
         except BaseException as ex:
             cr_logger.warning('getPage error detail: ' + str(ex))
 
